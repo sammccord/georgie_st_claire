@@ -7,6 +7,7 @@ var http = require('http');
 
 var news = require('./news.model.js');
 var newsify = require('../../../node_modules/newsify');
+var subliminal = require('../../../node_modules/subliminal');
 
 var T = new Twit(config.twit);
 var stream = T.stream('statuses/sample');
@@ -30,7 +31,11 @@ var tweet = function (text){
 }
 
 var constructNews = function(data,keyword,callback){
-	data.forEach(function(doc){
+	var arr = [];
+	data.forEach(function(doc,i){
+		console.log(i)
+		console.log(JSON.parse(doc));
+		console.log(doc);
 		var headline = doc.headline.print_headline? doc.headline.print_headline : doc.headline.main
 			var headlines = headline.match(/\w+/g).join(' ');
 			newsify(headlines,keyword,function(headline){
@@ -41,6 +46,7 @@ var constructNews = function(data,keyword,callback){
 
 var getJSON = function(options, cb)
 {
+		console.log('getting json');
 		call = false;
     var prot = options.port == 443 ? https : http;
     var req = prot.request(options, function(res)
@@ -122,13 +128,15 @@ stream.on('tweet', function(tweet) {
     console.log(keywords);
 
     buildQuery(year,month,day,keywords,0,function(options,keyword) {
-    	console.log(keyword);
     		getJSON(options, function(data) {
-    				//console.log(data);
-            constructNews(data,keyword,function(headline){
-            	//tweet(headline);
-            	console.log(headline);
-            });
+    				console.log(data);
+    				subliminal(data,function(subs){
+    					console.log(subs);
+    				});
+            // constructNews(data,keyword,function(headline){
+            // 	//tweet(headline);
+            // 	// console.log(headline);
+            // });
         })
     });
     }
