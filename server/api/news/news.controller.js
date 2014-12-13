@@ -10,7 +10,7 @@ var newsify = require('../../../node_modules/newsify');
 var subliminal = require('../../../node_modules/subliminal');
 
 var T = new Twit(config.twit);
-var stream = T.stream('statuses/sample');
+//var stream = T.stream('statuses/sample');
 
 var call = true;
 var postTweet = true;
@@ -104,43 +104,37 @@ var buildQuery = function(y,m,d,k,p,callback) {
     callback(options,keyword);
 }
 
+// stream.on('tweet', function(tweet) {
+//     if(tweet.lang == 'en' && call === true){
+//     	console.log(new Date(tweet.created_at).getMonth());
+//     	var date = new Date(tweet.created_at);
+//     	 var year =date.getYear(),
+//     	 day = date.getDate(),
+//     	 month = date.getMonth(), keywords;
 
+//     //Interpret some string
+//     var valids = tweet.text.match(/([0-9]+|[a-zA-Z]+)/g);
+//     var texts = [];
+//     if (valids && valids.length) {
+//         valids.forEach(function(valid) {
+//             if (!parseInt(valid)) {
+//                 texts.push(valid);
+//             }
+//         })
+//         if (texts.length > 0) keywords = texts;
+//     }
+//     console.log(keywords);
 
-stream.on('tweet', function(tweet) {
-    if(tweet.lang == 'en' && call === true){
-    	console.log(new Date(tweet.created_at).getMonth());
-    	var date = new Date(tweet.created_at);
-    	 var year =date.getYear(),
-    	 day = date.getDate(),
-    	 month = date.getMonth(), keywords;
-
-    //Interpret some string
-    var valids = tweet.text.match(/([0-9]+|[a-zA-Z]+)/g);
-    var texts = [];
-    if (valids && valids.length) {
-        valids.forEach(function(valid) {
-            if (!parseInt(valid)) {
-                texts.push(valid);
-            }
-        })
-        if (texts.length > 0) keywords = texts;
-    }
-    console.log(keywords);
-
-    buildQuery(year,month,day,keywords,0,function(options,keyword) {
-    		getJSON(options, function(data) {
-    				console.log(data);
-    				subliminal(data,function(subs){
-    					console.log(subs);
-    				});
-            // constructNews(data,keyword,function(headline){
-            // 	//tweet(headline);
-            // 	// console.log(headline);
-            // });
-        })
-    });
-    }
-});
+//     buildQuery(year,month,day,keywords,0,function(options,keyword) {
+//     		getJSON(options, function(data) {
+//             // constructNews(data,keyword,function(headline){
+//             // 	//tweet(headline);
+//             // 	// console.log(headline);
+//             // });
+//         });
+//     });
+//     }
+// });
 
 // Creates a new tweet
 var create = function(req, res) {
