@@ -13,6 +13,10 @@ angular.module('georgieStClaireApp')
             speak(data);
         });
 
+        $scope.post = function(){
+        	console.log('stuff');
+        }
+
         $scope.addThing = function() {
             if ($scope.newThing === '') {
                 return;

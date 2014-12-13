@@ -10,7 +10,7 @@ var newsify = require('../../../node_modules/newsify');
 var subliminal = require('../../../node_modules/subliminal');
 
 var T = new Twit(config.twit);
-//var stream = T.stream('statuses/sample');
+var stream = T.stream('statuses/sample');
 
 var call = true;
 var postTweet = true;
