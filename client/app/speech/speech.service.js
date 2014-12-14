@@ -11,7 +11,7 @@ angular.module('georgieStClaireApp')
           msg.voice = voices[10]; // Note: some voices don't support altering params
           msg.voiceURI = 'native';
           msg.volume = 1; // 0 to 1
-          msg.rate = .01; // 0.1 to 10
+          msg.rate = .75; // 0.1 to 10
           msg.pitch = 1.5; //0 to 2
           msg.text = message;
           msg.lang = 'en-US';
