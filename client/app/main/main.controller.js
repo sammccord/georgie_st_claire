@@ -3,15 +3,7 @@
 angular.module('georgieStClaireApp')
     .controller('MainCtrl', function($scope, $http, socket, speak) {
 
-        speak('testing testing one two three', function() {
-            console.log('done');
-        });
-
-        socket.syncUpdates('speak_news', null, function(e, data) {
-            console.log(e);
-            console.log(data);
-            speak(data);
-        });
+    		$scope.speaking = '';
 
         $scope.post = function() {
             console.log('stuff');
@@ -30,6 +22,8 @@ angular.module('georgieStClaireApp')
         $scope.$on('$destroy', function() {
             socket.unsyncUpdates('speak_news');
         });
+
+        $scope.max = new Date(new Date().getTime() + 48 * 60 * 60 * 1000);
 
         $scope.today = function() {
             $scope.dt = new Date();
@@ -68,7 +62,16 @@ angular.module('georgieStClaireApp')
         $scope.get_news = function() {
             console.log($scope.dt);
             $http.post('/api/news/', {
-                name: $scope.dt
+                keyword: $scope.keyword,
+                date: new Date($scope.dt)
+            })
+            .success(function(data){
+            	angular.element('#georgieMouth').addClass('animated').addClass(' bounce');
+            	//console.log(speak);
+            	$scope.speaking = 'animated bounce';
+            	speak(data.headline,function(){
+								angular.element('#georgieMouth').removeClass('animated').removeClass(' bounce');
+            	});
             });
         }
 

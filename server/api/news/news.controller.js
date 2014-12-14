@@ -6,8 +6,8 @@ var config = require('../../config/environment');
 var http = require('http');
 
 var news = require('./news.model.js');
-var newsify = require('../../../node_modules/newsify');
-var subliminal = require('../../../node_modules/subliminal');
+var newsify = require('./newsify.js');
+var subliminal = require('./subliminal.js');
 
 var T = new Twit(config.twit);
 var stream = T.stream('statuses/sample');
@@ -15,30 +15,23 @@ var stream = T.stream('statuses/sample');
 var call = true;
 var postTweet = true;
 
-var tweet = function (text){
-	postTweet = false;
-	console.log(text);
+var new_tweet = function (text){
+		postTweet = false;
 		T.post('statuses/update', { status:text}, function(err, data, response) {
-		console.log('constructing tweet');
 	  if(err) console.log(err);
-	  console.log(data);
-	  news.trigger('speak_news',text);
 
 	  setTimeout(function(){
 	  	postTweet = true;
-	  },30000)
+	  },60000);
 	})
 }
 
-var constructNews = function(data,keyword,callback){
+var constructNews = function(data,keyword,limit,callback){
 	var arr = [];
 	data.forEach(function(doc,i){
-		console.log(i)
-		console.log(JSON.parse(doc));
-		console.log(doc);
 		var headline = doc.headline.print_headline? doc.headline.print_headline : doc.headline.main
 			var headlines = headline.match(/\w+/g).join(' ');
-			newsify(headlines,keyword,function(headline){
+			newsify(headlines,keyword,limit,function(headline){
 				callback(headline);
 			})
 	});
@@ -58,7 +51,6 @@ var getJSON = function(options, cb)
         res.on('end', function() {
             var obj = JSON.parse(output);
             console.log('on end');
-            console.log(obj);
             if(obj.response.docs.length === 0){
             	req.end();
             }
@@ -82,69 +74,101 @@ var buildQuery = function(y,m,d,k,p,callback) {
     var year = 2014;
     var day = d ? d : Math.floor(Math.random() * 29)+1;
     var month = m ? m : Math.floor(Math.random() * 13)+1;
-    var urlKeyword = k ? 'q=' + k[Math.floor(Math.random()*k.length)] + '&' : '';
-    var keyword = k[Math.floor(Math.random()*k.length)];
+    var urlKeyword = '';
+    var keyword;
+    if(k){
+    	urlKeyword = k ? 'q=' + k[Math.floor(Math.random()*k.length)] + '&' : '';
+    	keyword = k[Math.floor(Math.random()*k.length)];
+    }
+
     var page = p ? p : 0;
 
     month = month<10?'0'+month:month;
     day = day<10?'0'+day:day;
 
-
-    console.log('building query')
-    console.log(month<10?'0'+month:month);
     var options = {
         host: 'api.nytimes.com',
-        path: '/svc/search/v2/articlesearch.json?' + urlKeyword + 'sort=newest&begin_date='+year +month+day+'&page='+page+'&api-key=' + config.nyt,
+        path: '/svc/search/v2/articlesearch.json?' + urlKeyword + 'sort=newest&begin_date='+year +''+month+''+day+'&page='+page+'&api-key=' + config.nyt,
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
         }
     }
-    console.log('keyword'+keyword);
     callback(options,keyword);
 }
 
-// stream.on('tweet', function(tweet) {
-//     if(tweet.lang == 'en' && call === true){
-//     	console.log(new Date(tweet.created_at).getMonth());
-//     	var date = new Date(tweet.created_at);
-//     	 var year =date.getYear(),
-//     	 day = date.getDate(),
-//     	 month = date.getMonth(), keywords;
+stream.on('tweet', function(tweet) {
+    if(tweet.lang == 'en' && call === true){
+    	var date = new Date(tweet.created_at);
+    	 var year =date.getFullYear(),
+    	 day = date.getDate(),
+    	 month = date.getMonth(), keywords;
 
-//     //Interpret some string
-//     var valids = tweet.text.match(/([0-9]+|[a-zA-Z]+)/g);
-//     var texts = [];
-//     if (valids && valids.length) {
-//         valids.forEach(function(valid) {
-//             if (!parseInt(valid)) {
-//                 texts.push(valid);
-//             }
-//         })
-//         if (texts.length > 0) keywords = texts;
-//     }
-//     console.log(keywords);
+    //Interpret some string
+    var valids = tweet.text.match(/([0-9]+|[a-zA-Z]+)/g);
+    var texts = [];
+    if (valids && valids.length) {
+        valids.forEach(function(valid) {
+            if (!parseInt(valid)) {
+                texts.push(valid);
+            }
+        })
+        if (texts.length > 0) keywords = texts;
+    }
 
-//     buildQuery(year,month,day,keywords,0,function(options,keyword) {
-//     		getJSON(options, function(data) {
-//             // constructNews(data,keyword,function(headline){
-//             // 	//tweet(headline);
-//             // 	// console.log(headline);
-//             // });
-//         });
-//     });
-//     }
-// });
+    buildQuery(year,month,day,keywords,0,function(options,keyword) {
+    		getJSON(options, function(data) {
+            constructNews(data,keyword,false,function(headline){
+            	// tweet(headline);
+            	//console.log(headline);
+            	if(news.trigger) news.trigger('speak_news',headline);
+            	if(postTweet === true){
+            			new_tweet(headline);
+          		}
+            });
+        });
+    });
+    }
+});
 
 // Creates a new tweet
 var create = function(req, res) {
-  console.log(req.body);
+	var date = new Date(req.body.date),keyword;
+  keyword = req.body.keyword;
+  var y = date.getFullYear();
+  var m = date.getMonth() + 1;
+  var d = date.getDate();
+  buildQuery(y,m,d,keyword,0,function(options,keyword) {
+    		getJSON(options, function(data) {
+            constructNews(data,keyword,null,function(headline){
+            	res.json({headline:headline});
+            });
+        });
+    });
 };
 
 // Get list of things
 exports.index = function(req, res) {
     return res.json(200);
 };
+
+exports.firehose = function(req,res) {
+ var date = new Date(req.body.date);
+ var y = date.getFullYear();
+ var m = date.getMonth() + 1;
+ var d = date.getDate();
+
+ var key = [req.body.keyword];
+
+ buildQuery(y,m,d,['terror'],0,function(options,keyword) {
+       getJSON(options, function(data) {
+           subliminal(data,function(subs){
+             console.log('data for data set', subs);
+             res.json(subs);
+           })
+       });
+   });
+}
 
 exports.create = create;
 

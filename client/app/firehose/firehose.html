@@ -1,3 +1,30 @@
-<div class="col-md-12">
-This is the firehose view.
-</div>
+<div ng-include="'components/navbar/navbar.html'"></div>
+<style type='text/css'>
+  #theform {
+    position: absolute;
+  }
+</style>
+
+<!-- <div id='theform' class="col-xs-6">
+   <form role="form" name="requestNews" ng-submit="get_news()">
+       <div class="form-group">
+           <p class="input-group">
+               <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="dt" is-open="opened" min-date="'1860-01-01'" max-date="{{max}}" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close"/>
+               <span class="input-group-btn">
+               <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+         </span>
+           </p>
+       </div>
+       <div class="form-group">
+           <label for="word"></label>
+           <input ng-model="keyword" type="text" class="form-control" id="word" placeholder="tag">
+       </div>
+       <button type="submit" class="btn btn-default">Submit</button>
+   </form>
+</div> -->
+
+<canvas id="myCanvas"></canvas>
+
+<audio id="audio" autoplay="true" preload="auto" tabindex="0"  type="audio/mpeg">
+  <source type="audio/mp3" src="http://puu.sh/dtoYm/0203c484dd.mp3">
+</audio>
