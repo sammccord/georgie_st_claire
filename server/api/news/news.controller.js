@@ -2,7 +2,7 @@
 
 var _ = require('lodash');
 var Twit = require('twit');
-var config = require('../../config/environment');
+var config = require('../../config/environment/index.js');
 var http = require('http');
 
 var news = require('./news.model.js');
