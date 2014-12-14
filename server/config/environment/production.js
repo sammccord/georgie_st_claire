@@ -13,11 +13,11 @@ module.exports = {
             process.env.PORT ||
             8080,
 
-  nyt: PROCESS.env.TIMES,
+  nyt: process.env.TIMES,
 
   twit: {
         consumer_key: 's66nH2xRSBvwVm4thYCgI0TiI',
-        consumer_secret: PROCESS.evn.TWIT_CONSUMER,
+        consumer_secret: process.env.TWIT_CONSUMER,
         access_token: '2919106498-Mhb84uKJ0r0vCKsYR4X0xwMv2eUK6qNVYwvlPIx',
         access_token_secret: process.evn.TWIT_SECRET
     },
