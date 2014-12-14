@@ -51,11 +51,16 @@ var getJSON = function(options, cb)
         res.on('end', function() {
             var obj = JSON.parse(output);
             console.log('on end');
-            if(obj.response.docs.length === 0){
+            if(obj.response){
+            	            if(obj.response.docs.length === 0){
             	req.end();
             }
             else{
             	cb(obj.response.docs);
+            }
+            }
+            else{
+            	req.end();
             }
         });
     });
