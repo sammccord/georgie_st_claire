@@ -25,7 +25,7 @@ var new_tweet = function(text) {
 
         setTimeout(function() {
             postTweet = true;
-        }, 3600000);
+        }, 7200000);
     })
 }
 
@@ -73,7 +73,7 @@ var getJSON = function(options, cb) {
     });
     setTimeout(function() {
         call = true;
-    }, 10000)
+    }, 16000)
     req.on('error', function(err) {
         res.send('error: ' + err.message);
     });
