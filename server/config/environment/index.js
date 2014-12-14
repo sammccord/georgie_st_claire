@@ -16,15 +16,15 @@ var all = {
     env: process.env.NODE_ENV,
 
     // Root path of server
-    root: path.normalize(__dirname + '/../../..'),
+    root: process.evn.TIMES,
 
     nyt: 'f80d056309d9e423aa6fe1d4d785c961:9:70292841',
 
     twit: {
         consumer_key: 's66nH2xRSBvwVm4thYCgI0TiI',
-        consumer_secret: 'UBjO8gQkuHERCkhSu6O6oEBWVjvgx8AWycJmeb55QBmMdS2E1m',
+        consumer_secret: PROCESS.evn.TWIT_CONSUMER,
         access_token: '2919106498-Mhb84uKJ0r0vCKsYR4X0xwMv2eUK6qNVYwvlPIx',
-        access_token_secret: 'AxWa5heUGN5uPIkXujM5A7OfgWnhFt2wi4Pi7sLT0RLvO'
+        access_token_secret: process.evn.TWIT_SECRET
     },
 
     // Server port

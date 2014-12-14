@@ -14,6 +14,7 @@ var stream = T.stream('statuses/sample');
 
 var call = true;
 var postTweet = true;
+var requestNews = true;
 
 var new_tweet = function (text){
 		postTweet = false;
@@ -122,16 +123,21 @@ stream.on('tweet', function(tweet) {
     }
 
     buildQuery(year,month,day,keywords,0,function(options,keyword) {
-    		getJSON(options, function(data) {
-            constructNews(data,keyword,false,function(headline){
-            	// tweet(headline);
-            	//console.log(headline);
-            	if(news.trigger) news.trigger('speak_news',headline);
-            	if(postTweet === true){
-            			new_tweet(headline);
-          		}
-            });
-        });
+    	if(requestNews === true){
+    		requestNews = false;
+    		setTimeout(function(){
+    			  getJSON(options, function(data) {
+	            constructNews(data,keyword,false,function(headline){
+	            	// tweet(headline);
+	            	//console.log(headline);
+	            	if(news.trigger) news.trigger('speak_news',headline);
+	            	if(postTweet === true){
+	            			new_tweet(headline);
+	          		}
+	            });
+	        });
+    		},12000)
+    	}
     });
     }
 });
@@ -166,12 +172,17 @@ exports.firehose = function(req,res) {
  var key = [req.body.keyword];
 
  buildQuery(y,m,d,['terror'],0,function(options,keyword) {
-       getJSON(options, function(data) {
-           subliminal(data,function(subs){
-             console.log('data for data set', subs);
-             res.json(subs);
-           })
-       });
+ 		if(requestNews === true){
+    		requestNews = false;
+    		setTimeout(function(){
+    			    getJSON(options, function(data) {
+		           subliminal(data,function(subs){
+		             console.log('data for data set', subs);
+		             res.json(subs);
+		           })
+		       });
+    		},12000)
+    	}
    });
 }
 
