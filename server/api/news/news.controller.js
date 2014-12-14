@@ -22,7 +22,7 @@ var new_tweet = function (text){
 
 	  setTimeout(function(){
 	  	postTweet = true;
-	  },60000);
+	  },1800000);
 	})
 }
 
