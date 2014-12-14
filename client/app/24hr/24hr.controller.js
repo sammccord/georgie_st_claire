@@ -6,6 +6,8 @@ angular.module('georgieStClaireApp')
   	$scope.speaking = false;
 
 	   socket.syncUpdates('speak_news', null, function(e, data) {
+	   		console.log(data);
+	   		console.log('getting');
 	   			if($scope.speaking === false){
 	   				$scope.speaking = true;
 	   				angular.element('#georgieMouth').addClass('animated').addClass(' bounce');
