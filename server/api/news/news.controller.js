@@ -25,7 +25,7 @@ var new_tweet = function(text) {
 
         setTimeout(function() {
             postTweet = true;
-        }, 1800000);
+        }, 3600000);
     })
 }
 
@@ -140,6 +140,7 @@ stream.on('tweet', function(tweet) {
                             //console.log(headline);
                             if (news.trigger) news.trigger('speak_news', headline);
                             if (postTweet === true) {
+                            	console.log('posting tweet');
                                 new_tweet(headline);
                             }
                         });
