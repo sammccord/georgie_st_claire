@@ -1,27 +1,9 @@
 'use strict';
 
 angular.module('georgieStClaireApp')
-    .controller('MainCtrl', function($scope, $http, socket, speak) {
+    .controller('MainCtrl', function($scope, $http, socket, speak, $modal) {
 
     		$scope.speaking = '';
-
-        $scope.post = function() {
-            console.log('stuff');
-        }
-
-        $scope.addThing = function() {
-            if ($scope.newThing === '') {
-                return;
-            }
-            $http.post('/api/things', {
-                name: $scope.newThing
-            });
-            $scope.newThing = '';
-        };
-
-        $scope.$on('$destroy', function() {
-            socket.unsyncUpdates('speak_news');
-        });
 
         $scope.max = new Date(new Date().getTime() + 48 * 60 * 60 * 1000);
 
@@ -44,7 +26,7 @@ angular.module('georgieStClaireApp')
         };
         $scope.toggleMin();
 
-        $scope.open = function($event) {
+        $scope.opendate = function($event) {
             $event.preventDefault();
             $event.stopPropagation();
 

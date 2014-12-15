@@ -31,13 +31,17 @@ var new_tweet = function(text) {
 
 var constructNews = function(data, keyword, limit, callback) {
     var arr = [];
+    var arr = [];
     data.forEach(function(doc, i) {
         var headline = doc.headline.print_headline ? doc.headline.print_headline : doc.headline.main
-        var headlines = headline.match(/\w+/g).join(' ');
-        newsify(headlines, keyword, limit, function(headline) {
-            callback(headline);
-        })
-    });
+        var headlines;
+        if (headline.match(/\w+/g)) {
+            headlines = headline.match(/\w+/g).join(' ');
+            newsify(headlines, keyword, limit, function(headline) {
+                callback(headline);
+            })
+        }
+    })
 }
 
 var getJSON = function(options, cb) {
@@ -132,7 +136,9 @@ stream.on('tweet', function(tweet) {
         buildQuery(year, month, day, keywords, 0, function(options, keyword) {
             if (requestNews === true) {
                 requestNews = false;
-                setTimeout(function() {requestNews = true}, 12000)
+                setTimeout(function() {
+                    requestNews = true
+                }, 12000)
                 getJSON(options, function(data) {
                     if (data) {
                         constructNews(data, keyword, false, function(headline) {
@@ -140,7 +146,7 @@ stream.on('tweet', function(tweet) {
                             //console.log(headline);
                             if (news.trigger) news.trigger('speak_news', headline);
                             if (postTweet === true) {
-                            	console.log('posting tweet');
+                                console.log('posting tweet');
                                 new_tweet(headline);
                             }
                         });
@@ -188,15 +194,17 @@ exports.firehose = function(req, res) {
     buildQuery(y, m, d, ['terror'], 0, function(options, keyword) {
         if (requestNews === true) {
             requestNews = false;
-            setTimeout(function() {requestNews = true},15000)
-              getJSON(options, function(data) {
-                  if (data) {
-                      subliminal(data, function(subs) {
-                          console.log('data for data set', subs);
-                          res.json(subs);
-                      })
-                  }
-              });
+            setTimeout(function() {
+                requestNews = true
+            }, 15000)
+            getJSON(options, function(data) {
+                if (data) {
+                    subliminal(data, function(subs) {
+                        console.log('data for data set', subs);
+                        res.json(subs);
+                    })
+                }
+            });
         }
     });
 }

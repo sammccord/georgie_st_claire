@@ -24,13 +24,17 @@ $fa-font-path: "/bower_components/font-awesome/fonts";
  		list-style-type:none;
  		li{
  			width: 60px;
- 			padding-bottom:12px;
+ 			padding-bottom:20px;
  			a{
  				padding:8px;
  				font-size: 1em;
  				 			.fa{
  				font-size:44px;
  			}
+ 			}
+ 			&.twitter {
+ 				position:absolute;
+ 				bottom:0;
  			}
  		}
  	}
@@ -48,14 +52,14 @@ position: fixed; right: 0; bottom: 0;
 min-width: 100%; min-height: 100%;
 width: auto; height: auto; z-index: -2;
 background-size: cover;
-background-image:url(http://sammc.co/images/anchor.png);
+background-image:url(http://georgie-heroku.s3.amazonaws.com/images/anchor.png);
 }
  #georgieMouth {
 position: fixed; right: 0; bottom: 0;
 min-width: 100%; min-height: 100%;
 width: auto; height: auto; z-index: -1;
 background-size: cover;
-background-image:url(http://sammc.co/images/anchor_mouth.png);
+background-image:url(http://georgie-heroku.s3.amazonaws.com/images/anchor_mouth.png);
 }
 
 #loading{

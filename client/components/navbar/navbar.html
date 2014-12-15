@@ -1,4 +1,33 @@
-<div id="fixedRightNav">
+<div ng-controller="NavbarCtrl">
+<script type="text/ng-template" id="myModalContent.html">
+        <div class="modal-header">
+            <h3 class="modal-title">Georgie St. Claire</h3>
+            <h4>News Daemon Extraordinaire</h4>
+        </div>
+        <div class="modal-body">
+            <p>
+                Made with <i class="fa fa-heart"></i> by
+                <a href="http://www.sammc.co/" target="_blank">
+        			Sam McCord
+        		</a> and
+                <a href="http://www.lindsaylevine.com/" target="_blank">
+        			Lindsay Levine
+        		</a>
+            </p>
+            <p><i class="fa fa-trophy"></i> People's Choice at the New York Times 2014 Hackathon, utilizing the Articles API, Twitter, and Chrome's Speech Synthesis.</p>
+            <p>Georgie's main talent is interpreting language, reducing relevant news to its core components, and condensing it, thereby creating easily consumable, personalized, content rich news proven to be exponentially more effective than the traditional model.</p>
+            <p>Everyday, Georgie can offer us insights into the effectiveness of artificial structures and meaning making. Through his trademarked technique, Georgie illustrates that meaning doesn't inhere in words or sentences, but in us.</p>
+            <hr>
+            <p><i class="fa fa-anchor"></i> - Give Georgie a keyword and a date, and he'll news you as effectively as he can.</p>
+            <p><i class="fa fa-history"></i> - Georgie listens to the public Twitter stream and converts tweets to news in real time!</p>
+            <p><i class="fa fa-eye-slash"></i> - Georgie's latest experimental feature, the Firehose. Ever want the latest news shot directly into your eyeballs? Well now you can. No one has time to read the news, let's be honest. Takes tags and images from the API and subliminally educates you. Patent Pending.</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-default" ng-click="cancel()">Close</button>
+        </div>
+    </script>
+
+<div id="fixedRightNav" ng-click="openModal()">
 	<ul>
 		<li>
 			<a href="/">
@@ -15,5 +44,18 @@
 				<i class="fa fa-eye-slash"></i>
 			</a>
 		</li>
+		<li style="padding-top:120px;">
+			<a ng-click="openModal()">
+				<i class="fa fa-info-circle"></i>
+			</a>
+
+		</li>
+		<li class="twitter">
+			<a href="https://twitter.com/newsman_georgie" target="_blank">
+				<i class="fa fa-twitter"></i>
+			</a>
+		</li>
+
 	</ul>
+</div>
 </div>

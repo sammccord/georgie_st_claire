@@ -6,23 +6,17 @@ angular.module('georgieStClaireApp')
         $scope.speaking = false;
         $scope.spokeonce = false;
 
-        console.log('blow it out your dick')
-
         socket.syncUpdates('speak_news', null, function(e, data) {
             console.log(data);
-            console.log('getting');
             if ($scope.speaking === false) {
                 $scope.speaking = true;
                 angular.element('#georgieMouth').addClass('animated').addClass(' bounce');
             }
-            if ($scope.spokeonce = false) {
-                console.log('loaded');
+            console.log($scope.spokeonce);
+            if ($scope.spokeonce === false) {
                 $scope.spokeonce = true;
-                console.log(angular.element('#loading'));
-                angular.element('#loading').addClass('hide');
             }
             speak(data, function() {
-                console.log('spoken');
                 $scope.speaking = false;
             });
 
