@@ -96,6 +96,8 @@ var buildQuery = function(y, m, d, k, p, callback) {
         urlKeyword = k ? 'q=' + k[Math.floor(Math.random() * k.length)] + '&' : '';
         keyword = k[Math.floor(Math.random() * k.length)];
     }
+    console.log(k);
+    console.log(urlKeyword);
 
     var page = p ? p : 0;
 
@@ -104,12 +106,13 @@ var buildQuery = function(y, m, d, k, p, callback) {
 
     var options = {
         host: 'api.nytimes.com',
-        path: '/svc/search/v2/articlesearch.json?' + urlKeyword + 'sort=newest&begin_date=' + year + '' + month + '' + day + '&page=' + page + '&api-key=' + config.nyt,
+        path: '/svc/search/v2/articlesearch.json?' + urlKeyword + 'sort=newest&end_date=' + year + '' + month + '' + day + '&page=' + page + '&api-key=' + config.nyt,
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
         }
     }
+    console.log(options.path)
     callback(options, keyword);
 }
 
@@ -118,7 +121,7 @@ stream.on('tweet', function(tweet) {
         var date = new Date(tweet.created_at);
         var year = date.getFullYear(),
             day = date.getDate(),
-            month = date.getMonth(),
+            month = date.getMonth() + 1,
             keywords;
 
         //Interpret some string
@@ -142,8 +145,7 @@ stream.on('tweet', function(tweet) {
                 getJSON(options, function(data) {
                     if (data) {
                         constructNews(data, keyword, false, function(headline) {
-                            // tweet(headline);
-                            //console.log(headline);
+                            console.log(headline);
                             if (news.trigger) news.trigger('speak_news', headline);
                             if (postTweet === true) {
                                 console.log('posting tweet');
@@ -165,7 +167,8 @@ var create = function(req, res) {
     var y = date.getFullYear();
     var m = date.getMonth() + 1;
     var d = date.getDate();
-    buildQuery(y, m, d, keyword, 0, function(options, keyword) {
+    console.log('creating');
+    buildQuery(y, m, d, [keyword], 0, function(options, keyword) {
         getJSON(options, function(data) {
             if (data) {
                 constructNews(data, keyword, null, function(headline) {
@@ -191,7 +194,7 @@ exports.firehose = function(req, res) {
 
     var key = [req.body.keyword];
 
-    buildQuery(y, m, d, ['terror'], 0, function(options, keyword) {
+    buildQuery(y, m, d, [req.body.keyword], 0, function(options, keyword) {
         if (requestNews === true) {
             requestNews = false;
             setTimeout(function() {
