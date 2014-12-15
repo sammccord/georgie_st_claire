@@ -9,8 +9,8 @@ var news = require('./news.model.js');
 var newsify = require('./newsify.js');
 var subliminal = require('./subliminal.js');
 
-// var T = new Twit(config.twit);
-// var stream = T.stream('statuses/sample');
+var T = new Twit(config.twit);
+var stream = T.stream('statuses/sample');
 
 var call = true;
 var postTweet = true;
@@ -116,48 +116,48 @@ var buildQuery = function(y, m, d, k, p, callback) {
     callback(options, keyword);
 }
 
-// stream.on('tweet', function(tweet) {
-//     if (tweet.lang == 'en' && call === true) {
-//         var date = new Date(tweet.created_at);
-//         var year = date.getFullYear(),
-//             day = date.getDate(),
-//             month = date.getMonth() + 1,
-//             keywords;
+stream.on('tweet', function(tweet) {
+    if (tweet.lang == 'en' && call === true) {
+        var date = new Date(tweet.created_at);
+        var year = date.getFullYear(),
+            day = date.getDate(),
+            month = date.getMonth() + 1,
+            keywords;
 
-//         //Interpret some string
-//         var valids = tweet.text.match(/([0-9]+|[a-zA-Z]+)/g);
-//         var texts = [];
-//         if (valids && valids.length) {
-//             valids.forEach(function(valid) {
-//                 if (!parseInt(valid)) {
-//                     texts.push(valid);
-//                 }
-//             })
-//             if (texts.length > 0) keywords = texts;
-//         }
+        //Interpret some string
+        var valids = tweet.text.match(/([0-9]+|[a-zA-Z]+)/g);
+        var texts = [];
+        if (valids && valids.length) {
+            valids.forEach(function(valid) {
+                if (!parseInt(valid)) {
+                    texts.push(valid);
+                }
+            })
+            if (texts.length > 0) keywords = texts;
+        }
 
-//         buildQuery(year, month, day, keywords, 0, function(options, keyword) {
-//             if (requestNews === true) {
-//                 requestNews = false;
-//                 setTimeout(function() {
-//                     requestNews = true
-//                 }, 12000)
-//                 getJSON(options, function(data) {
-//                     if (data) {
-//                         constructNews(data, keyword, false, function(headline) {
-//                             console.log(headline);
-//                             if (news.trigger) news.trigger('speak_news', headline);
-//                             if (postTweet === true) {
-//                                 console.log('posting tweet');
-//                                 new_tweet(headline);
-//                             }
-//                         });
-//                     }
-//                 });
-//             }
-//         });
-//     }
-// });
+        buildQuery(year, month, day, keywords, 0, function(options, keyword) {
+            if (requestNews === true) {
+                requestNews = false;
+                setTimeout(function() {
+                    requestNews = true
+                }, 12000)
+                getJSON(options, function(data) {
+                    if (data) {
+                        constructNews(data, keyword, false, function(headline) {
+                            console.log(headline);
+                            if (news.trigger) news.trigger('speak_news', headline);
+                            if (postTweet === true) {
+                                console.log('posting tweet');
+                                new_tweet(headline);
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    }
+});
 
 // Creates a new tweet
 var create = function(req, res) {
