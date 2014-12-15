@@ -112,7 +112,6 @@ var buildQuery = function(y, m, d, k, p, callback) {
             'Content-Type': 'application/json'
         }
     }
-    console.log(options.path)
     callback(options, keyword);
 }
 
@@ -148,7 +147,6 @@ stream.on('tweet', function(tweet) {
                             console.log(headline);
                             if (news.trigger) news.trigger('speak_news', headline);
                             if (postTweet === true) {
-                                console.log('posting tweet');
                                 new_tweet(headline);
                             }
                         });
@@ -163,12 +161,12 @@ stream.on('tweet', function(tweet) {
 var create = function(req, res) {
     var date = new Date(req.body.date),
         keyword;
-    keyword = req.body.keyword;
+    keyword = req.body.keyword.split(' ');
     var y = date.getFullYear();
     var m = date.getMonth() + 1;
     var d = date.getDate();
     console.log('creating');
-    buildQuery(y, m, d, [keyword], 0, function(options, keyword) {
+    buildQuery(y, m, d, keyword, 0, function(options, keyword) {
         getJSON(options, function(data) {
             if (data) {
                 constructNews(data, keyword, null, function(headline) {
@@ -192,9 +190,9 @@ exports.firehose = function(req, res) {
     var m = date.getMonth() + 1;
     var d = date.getDate();
 
-    var key = [req.body.keyword];
+    var key = req.body.keyword.split(' ');
 
-    buildQuery(y, m, d, [req.body.keyword], 0, function(options, keyword) {
+    buildQuery(y, m, d, key, 0, function(options, keyword) {
         if (requestNews === true) {
             requestNews = false;
             setTimeout(function() {

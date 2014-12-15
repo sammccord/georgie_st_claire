@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('georgieStClaireApp')
-  .controller('FirehoseCtrl', function ($http, $scope, $interval, $timeout, $location, Auth, speak) {
+  .controller('FirehoseCtrl', function ($http, $scope, $interval, $timeout, $location, Auth, speak,socket) {
     $scope.max = new Date(new Date().getTime() + 48 * 60 * 60 * 1000);
 
     $scope.today = function() {
