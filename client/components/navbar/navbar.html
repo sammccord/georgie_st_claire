@@ -1,5 +1,16 @@
 <div ng-controller="NavbarCtrl">
-<script type="text/ng-template" id="myModalContent.html">
+    <script type="text/ng-template" id="wrongbrowser.html">
+        <div class="modal-header">
+            <h3>Sorry, this project is Chrome only.</h3>
+        </div>
+        <div class="modal-body">
+            <p>This project relies heavily on </p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-default" ng-click="browser-cancel()">Close</button>
+        </div>
+    </script>
+    <script type="text/ng-template" id="myModalContent.html">
         <div class="modal-header">
             <h3 class="modal-title">Georgie St. Claire</h3>
             <h4>News Daemon Extraordinaire</h4>
@@ -27,35 +38,35 @@
         </div>
     </script>
 
-<div id="fixedRightNav">
-	<ul>
-		<li>
-			<a href="/">
-				<i class="fa fa-anchor"></i>
-			</a>
-		</li>
-		<li>
-			<a href="/24hr">
-				<i class="fa fa-history"></i>
-			</a>
-		</li>
-		<li>
-			<a href="/firehose">
-				<i class="fa fa-eye-slash"></i>
-			</a>
-		</li>
-		<li style="padding-top:120px;">
-			<a ng-click="openModal()">
-				<i class="fa fa-info-circle"></i>
-			</a>
+    <div id="fixedRightNav">
+        <ul>
+            <li>
+                <a href="/">
+                    <i class="fa fa-anchor"></i>
+                </a>
+            </li>
+            <li>
+                <a href="/24hr">
+                    <i class="fa fa-history"></i>
+                </a>
+            </li>
+            <li>
+                <a href="/firehose">
+                    <i class="fa fa-eye-slash"></i>
+                </a>
+            </li>
+            <li style="padding-top:120px;">
+                <a ng-click="openModal()">
+                    <i class="fa fa-info-circle"></i>
+                </a>
 
-		</li>
-		<li class="twitter">
-			<a href="https://twitter.com/newsman_georgie" target="_blank">
-				<i class="fa fa-twitter"></i>
-			</a>
-		</li>
+            </li>
+            <li class="twitter">
+                <a href="https://twitter.com/newsman_georgie" target="_blank">
+                    <i class="fa fa-twitter"></i>
+                </a>
+            </li>
 
-	</ul>
-</div>
+        </ul>
+    </div>
 </div>
