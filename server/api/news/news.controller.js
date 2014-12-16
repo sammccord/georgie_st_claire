@@ -115,47 +115,47 @@ var buildQuery = function(y, m, d, k, p, callback) {
     callback(options, keyword);
 }
 
-stream.on('tweet', function(tweet) {
-    if (tweet.lang == 'en' && call === true) {
-        var date = new Date(tweet.created_at);
-        var year = date.getFullYear(),
-            day = date.getDate(),
-            month = date.getMonth() + 1,
-            keywords;
+// stream.on('tweet', function(tweet) {
+//     if (tweet.lang == 'en' && call === true) {
+//         var date = new Date(tweet.created_at);
+//         var year = date.getFullYear(),
+//             day = date.getDate(),
+//             month = date.getMonth() + 1,
+//             keywords;
 
-        //Interpret some string
-        var valids = tweet.text.match(/([0-9]+|[a-zA-Z]+)/g);
-        var texts = [];
-        if (valids && valids.length) {
-            valids.forEach(function(valid) {
-                if (!parseInt(valid)) {
-                    texts.push(valid);
-                }
-            })
-            if (texts.length > 0) keywords = texts;
-        }
+//         //Interpret some string
+//         var valids = tweet.text.match(/([0-9]+|[a-zA-Z]+)/g);
+//         var texts = [];
+//         if (valids && valids.length) {
+//             valids.forEach(function(valid) {
+//                 if (!parseInt(valid)) {
+//                     texts.push(valid);
+//                 }
+//             })
+//             if (texts.length > 0) keywords = texts;
+//         }
 
-        buildQuery(year, month, day, keywords, 0, function(options, keyword) {
-            if (requestNews === true) {
-                requestNews = false;
-                setTimeout(function() {
-                    requestNews = true
-                }, 12000)
-                getJSON(options, function(data) {
-                    if (data) {
-                        constructNews(data, keyword, false, function(headline) {
-                            console.log(headline);
-                            if (news.trigger) news.trigger('speak_news', headline);
-                            if (postTweet === true) {
-                                new_tweet(headline);
-                            }
-                        });
-                    }
-                });
-            }
-        });
-    }
-});
+//         buildQuery(year, month, day, keywords, 0, function(options, keyword) {
+//             if (requestNews === true) {
+//                 requestNews = false;
+//                 setTimeout(function() {
+//                     requestNews = true
+//                 }, 12000)
+//                 getJSON(options, function(data) {
+//                     if (data) {
+//                         constructNews(data, keyword, false, function(headline) {
+//                             console.log(headline);
+//                             if (news.trigger) news.trigger('speak_news', headline);
+//                             if (postTweet === true) {
+//                                 new_tweet(headline);
+//                             }
+//                         });
+//                     }
+//                 });
+//             }
+//         });
+//     }
+// });
 
 // Creates a new tweet
 var create = function(req, res) {
@@ -196,6 +196,7 @@ exports.firehose = function(req, res) {
         if (requestNews === true) {
             requestNews = false;
             setTimeout(function() {
+                console.log('inside requestnews timeout');
                 requestNews = true
             }, 15000)
             getJSON(options, function(data) {

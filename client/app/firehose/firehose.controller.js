@@ -35,16 +35,50 @@ angular.module('georgieStClaireApp')
             keyword: $scope.keyword,
             date: new Date($scope.dt)
         }).success(function(subs){
-            console.log('$scope.sampleData and subs before: ', $scope.sampleData, subs);
+            console.log('subs', subs);
             $scope.sampleData = subs.map(function(x){ return x });
-            console.log('$scope.sampleData after: ', $scope.sampleData);
             $scope.startHose();
         }).error(function(err){
           if(err) throw new Error(err);
         });
     }
 
-  $scope.sampleData = []
+    //plays music on first click
+    $scope.musicBool = true;
+    $scope.musicPlaying = false;
+    $scope.submitClick = function() {
+      if($scope.musicBool) {
+        document.getElementById('audio').play();
+        $scope.musicBool = false;
+        $scope.musicPlaying = true;
+      }
+      $scope.respondToSubmission();
+      $scope.get_news();
+    }
+
+    $scope.waiting15secs = false;
+
+    $scope.respondToSubmission = function() {
+      $scope.waiting15secs = true;
+      console.log('waiting', $scope.waiting15secs);
+      setTimeout(function() { //will disable button temporarily so ppl arent like da ef
+          $scope.waiting15secs = false;
+          console.log('waiting bak to false?', $scope.waiting15secs);
+          $scope.$apply();
+      }, 15000)
+    }
+
+    $scope.pauseMusic = function() {
+      document.getElementById('audio').pause();
+      $scope.musicPlaying = false;
+    }
+    $scope.playMusic = function() {
+      document.getElementById('audio').play();
+      $scope.musicPlaying = true;
+    }
+
+
+    $scope.sampleData = []
 
     $scope.dateOptions = {
        formatYear: 'yy',
@@ -68,12 +102,10 @@ angular.module('georgieStClaireApp')
     var useThisForNow = 'http://www.photosinbox.com/download/warning-sign.jpg';
     firstImg.src = useThisForNow;
     firstImg.onload = function() {
-      context.drawImage(firstImg,-175,-100,1620,900);
+      context.drawImage(firstImg,0,0,window.innerWidth,window.innerHeight);
     };
 
-    var count = 100;
     var imageObj = new Image();
-    var colors = ['green','red','blue','black','magenta','orange','yellow'];
     var fonts = ['Verdana', 'Arial', 'Georgia', 'Tahoma','Impact','Comic Sans MS'];
 
     $scope.startHose = function (){
@@ -81,9 +113,6 @@ angular.module('georgieStClaireApp')
         var timer = $interval(function() {
 
                     var idx = Math.floor((Math.random() * $scope.sampleData.length) + 1);
-                    var ci1 = Math.floor((Math.random() * colors.length) + 1);
-                    var ci2 = Math.floor((Math.random() * colors.length) + 1);
-                    var ci3 = Math.floor((Math.random() * colors.length) + 1);
                     var fi = Math.floor((Math.random() * fonts.length) + 1);
 
                     if($scope.sampleData[idx]){
@@ -91,7 +120,7 @@ angular.module('georgieStClaireApp')
                         var url = 'http://nytimes.com/' + $scope.sampleData[idx].url;
                         imageObj.src = url;
                         imageObj.onload = function() {
-                          context.drawImage(imageObj,0,0,1620,900);
+                          context.drawImage(imageObj,0,0,window.innerWidth,window.innerHeight);
                           // context.drawImage(imageObj, 0, 0, window.width, window.height);
                         };
                       } else if($scope.sampleData[idx].name) {
@@ -108,13 +137,12 @@ angular.module('georgieStClaireApp')
                         // context.fillStyle=gradient;
                         context.clearRect ( 0 , 0 , canvas.width, canvas.height );
                         context.fillStyle='white';
-                        context.fillText($scope.sampleData[idx].value,600,300);
+                        context.fillText($scope.sampleData[idx].value,window.innerWidth/2,window.innerHeight/2);
                         context.textAlign = 'center';
                         context.textBaseline = "middle";
                       }
                     }
-                    if( count == 0) clearInterval(timer);
       },90);
-    }, 4100);
+    }, 3000);
     }
   });
