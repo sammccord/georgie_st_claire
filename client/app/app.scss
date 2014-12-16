@@ -7,6 +7,9 @@ $fa-font-path: "/bower_components/font-awesome/fonts";
 /**
  * App-wide Styles
  */
+ body {
+ 	background-color:black;
+ }
 
  #fixedRightNav {
  	z-index:999999;
