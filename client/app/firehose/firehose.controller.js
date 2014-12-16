@@ -91,12 +91,16 @@ angular.module('georgieStClaireApp')
     var canvas = angular.element('#myCanvas')[0];
     var wHeight = window.innerHeight - 500;
     var wWidth = window.innerWidth - 900;
-    // canvas.style.width = window.innerWidth + "px";
-    // canvas.style.height = window.innerHeight + "px";
     var context = canvas.getContext('2d');
     context.canvas.width = window.innerWidth;
     context.canvas.height = window.innerHeight;
     context.canvas.style.background = 'black';
+
+
+    angular.element(window).resize(function () { //responsive canvas
+      context.canvas.width = window.innerWidth;
+      context.canvas.height = window.innerHeight;
+    });
 
     var firstImg = new Image();
     var useThisForNow = 'http://www.photosinbox.com/download/warning-sign.jpg';
