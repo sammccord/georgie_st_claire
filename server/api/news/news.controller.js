@@ -200,13 +200,13 @@ exports.firehose = function(req, res) {
         if (requestNews === true) {
             requestNews = false;
             setTimeout(function() {
-                console.log('inside requestnews timeout');
                 requestNews = true
             }, 15000)
             getJSON(options, function(data) {
+              console.log('data before subliminalizing', data);
                 if (data) {
                     subliminal(data, function(subs) {
-                        console.log('data for data set', subs);
+                        // console.log('data for data set', subs);
                         res.json(subs);
                     })
                 }
