@@ -22,8 +22,8 @@
   }
 </style>
 
-<div id='theform' class="col-lg-4 col-lg-offset-4 col-xs-6">
-   <form role="form" name="requestNews" ng-submit="get_news()">
+<div id='theform' class="col-xs-3">
+   <form role="form" name="requestNews">
        <div class="form-group">
            <p class="input-group">
                <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="dt" is-open="opened" min-date="'1860-01-01'" max-date="{{max}}" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close"/>
@@ -39,7 +39,7 @@
        <button type="submit" ng-click='submitClick()' ng-disabled='waiting15secs' class="btn btn-default">Submit</button>
        <i class="fa fa-pause" ng-show='musicPlaying' ng-click="pauseMusic()"></i>
        <i class="fa fa-play" ng-hide='musicPlaying' ng-click="playMusic()"></i>
-       <p ng-show="waiting15secs" id='pleasewait'>plz wait 15 seconds before making another request we are very busy brainwashing the masses</p>
+<!--        <p ng-show="waiting15secs" id='pleasewait'>plz wait 15 seconds before making another request we are very busy brainwashing the masses</p> -->
    </form>
 </div>
 
@@ -48,3 +48,10 @@
 <audio id="audio" type="audio/mpeg">
   <source type="audio/mp3" src="http://puu.sh/dtoYm/0203c484dd.mp3">
 </audio>
+
+			<div id="loading" ng-show="loading">
+				<svg width="40" height="40" viewbox="0 0 40 40" ng-show="!loaded">
+			  <!-- <rect width="40" height="40" class="rect" />  <- this looks buggy in retina safari -->
+			  <polygon points="0 0 0 40 40 40 40 0" class="rect" />
+			</svg>
+			</div>

@@ -4,6 +4,8 @@ angular.module('georgieStClaireApp')
   .controller('FirehoseCtrl', function ($http, $scope, $interval, $timeout, $location, Auth, speak,socket) {
     $scope.max = new Date(new Date().getTime() + 48 * 60 * 60 * 1000);
 
+    $scope.loading = false;
+
     $scope.today = function() {
        $scope.dt = new Date();
     };
@@ -31,6 +33,7 @@ angular.module('georgieStClaireApp')
     };
 
     $scope.get_news = function() {
+    	$scope.loading = true;
        $http.post('/api/news/firehose',{
             keyword: $scope.keyword,
             date: new Date($scope.dt)
@@ -97,6 +100,9 @@ angular.module('georgieStClaireApp')
     context.canvas.width = window.innerWidth;
     context.canvas.height = window.innerHeight;
     context.canvas.style.background = 'black';
+		context.rect(0,0,window.innerWidth,window.innerHeight);
+		context.fillStyle="black";
+		context.fill();
 
     var firstImg = new Image();
     var useThisForNow = 'http://www.photosinbox.com/download/warning-sign.jpg';
@@ -110,6 +116,9 @@ angular.module('georgieStClaireApp')
 
     $scope.startHose = function (){
     	var delayTimer = $timeout(function() {
+
+    		$scope.loading = false;
+
         var timer = $interval(function() {
 
                     var idx = Math.floor((Math.random() * $scope.sampleData.length) + 1);

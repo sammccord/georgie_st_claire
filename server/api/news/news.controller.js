@@ -35,7 +35,6 @@ var constructNews = function(data, keyword, limit, callback) {
     data.forEach(function(doc, i) {
         var headline = doc.headline.print_headline ? doc.headline.print_headline : doc.headline.main
         var headlines;
-        console.log(headline);
         if (headline) {
             if (headline.match(/\w+/g)) {
                 headlines = headline.match(/\w+/g).join(' ');
@@ -49,7 +48,6 @@ var constructNews = function(data, keyword, limit, callback) {
 }
 
 var getJSON = function(options, cb) {
-    console.log('getting json');
     call = false;
     var prot = options.port == 443 ? https : http;
     var req = prot.request(options, function(res) {
@@ -81,27 +79,25 @@ var getJSON = function(options, cb) {
     });
     setTimeout(function() {
         call = true;
-    }, 16000)
+    }, 18000)
     req.on('error', function(err) {
         res.send('error: ' + err.message);
     });
     req.end();
 }
 
-var buildQuery = function(y, m, d, k, p, callback) {
+var buildQuery = function(y, m, d, k, p, api, callback) {
     //getYear being weird
-    //var year = y ? y : 2014;
-    var year = 2014;
+    var year = y ? y : 2014;
     var day = d ? d : Math.floor(Math.random() * 29) + 1;
     var month = m ? m : Math.floor(Math.random() * 13) + 1;
     var urlKeyword = '';
+    var apikey = api ? api:config.nyt;
     var keyword;
     if (k) {
         urlKeyword = k ? 'q=' + k[Math.floor(Math.random() * k.length)] + '&' : '';
         keyword = k[Math.floor(Math.random() * k.length)];
     }
-    console.log(k);
-    console.log(urlKeyword);
 
     var page = p ? p : 0;
 
@@ -110,7 +106,7 @@ var buildQuery = function(y, m, d, k, p, callback) {
 
     var options = {
         host: 'api.nytimes.com',
-        path: '/svc/search/v2/articlesearch.json?' + urlKeyword + 'sort=newest&end_date=' + year + '' + month + '' + day + '&page=' + page + '&api-key=' + config.nyt,
+        path: '/svc/search/v2/articlesearch.json?' + urlKeyword + 'sort=newest&end_date=' + year + '' + month + '' + day + '&page=' + page + '&api-key=' + apikey,
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -139,7 +135,7 @@ stream.on('tweet', function(tweet) {
             if (texts.length > 0) keywords = texts;
         }
 
-        buildQuery(year, month, day, keywords, 0, function(options, keyword) {
+        buildQuery(year, month, day, keywords, 0, null, function(options, keyword) {
             if (requestNews === true) {
                 requestNews = false;
                 setTimeout(function() {
@@ -170,7 +166,7 @@ var create = function(req, res) {
     var m = date.getMonth() + 1;
     var d = date.getDate();
     console.log('creating');
-    buildQuery(y, m, d, keyword, 0, function(options, keyword) {
+    buildQuery(y, m, d, keyword, 0, null, function(options, keyword) {
         getJSON(options, function(data) {
             if (data) {
                 constructNews(data, keyword, null, function(headline) {
@@ -196,22 +192,14 @@ exports.firehose = function(req, res) {
 
     var key = req.body.keyword.split(' ');
 
-    buildQuery(y, m, d, key, 0, function(options, keyword) {
-        if (requestNews === true) {
-            requestNews = false;
-            setTimeout(function() {
-                console.log('inside requestnews timeout');
-                requestNews = true
-            }, 15000)
+    buildQuery(y, m, d, key, 0, 'e601714af8dd278196c357455f5d05c4:19:70501496',function(options, keyword) {
             getJSON(options, function(data) {
                 if (data) {
                     subliminal(data, function(subs) {
-                        console.log('data for data set', subs);
                         res.json(subs);
                     })
                 }
             });
-        }
     });
 }
 
