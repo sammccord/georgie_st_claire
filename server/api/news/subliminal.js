@@ -3,7 +3,9 @@ module.exports = function(docs,cb) {
     if (docs) {
         docs.forEach(function(doc) {
         		console.log(doc);
-        		if(doc.news_desk.length != 'None') ret.push(doc.news_desk);
+        		if(doc.news_desk){
+        			if(doc.news_desk.length != 'None') ret.push(doc.news_desk);
+        		}
             if (doc.multimedia.length > 0) {
                 doc.multimedia.forEach(function(media) {
                 	if(media.type === 'image' && media.subtype === "xlarge"){

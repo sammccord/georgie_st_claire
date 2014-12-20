@@ -22,7 +22,7 @@
   }
 </style>
 
-<div id='theform' class="col-xs-3">
+<div id='theform' class="col-xs-3" style="padding:20px;">
    <form role="form" name="requestNews">
        <div class="form-group">
            <p class="input-group">
@@ -34,7 +34,7 @@
        </div>
        <div class="form-group">
            <label for="word"></label>
-           <input ng-model="keyword" type="text" class="form-control" id="word" placeholder="please enter one tag to initiate the experience of a lifetime">
+           <input ng-model="keyword" type="text" class="form-control" id="word" placeholder="Enter Tag">
        </div>
        <button type="submit" ng-click='submitClick()' ng-disabled='waiting15secs' class="btn btn-default">Submit</button>
        <i class="fa fa-pause" ng-show='musicPlaying' ng-click="pauseMusic()"></i>

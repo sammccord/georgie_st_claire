@@ -38,11 +38,19 @@ angular.module('georgieStClaireApp')
             keyword: $scope.keyword,
             date: new Date($scope.dt)
         }).success(function(subs){
-            console.log('subs', subs);
-            $scope.sampleData = subs.map(function(x){ return x });
-            $scope.startHose();
+        		if(subs){
+        			if(subs.length > 0){
+        				console.log('subs', subs);
+            		$scope.sampleData = subs.map(function(x){ return x });
+            		$scope.startHose();
+        			}
+        			else{
+        				$scope.loading = false;
+        			}
+        		}
         }).error(function(err){
           if(err) throw new Error(err);
+          $scope.loading = false;
         });
     }
 
